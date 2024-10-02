@@ -4,6 +4,11 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    messageLifeTime: '%env(int:MESSAGE_LIFE_TIME)%'
+    firebaseConfig: '%env(json:GOOGLE_APPLICATION_CREDENTIALS)%'
+    clientFirebaseConfig: '%env(json:CLIENT_FIREBASE_CONFIG)%'
+    firebaseBadgeIcon: '%env(FIREBASE_BADGE_ICON)%'
+    vapidKey: '%env(VAPID_KEY)%'
 
 services:
     # default configuration for services in *this* file
@@ -22,3 +27,39 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    gedmo.mapping.driver.attribute:
+        class: Gedmo\Mapping\Driver\AttributeReader    
+
+    gedmo.listener.timestampable:
+        class: Gedmo\Timestampable\TimestampableListener
+        tags:
+            - { name: doctrine.event_listener, event: 'prePersist' }
+            - { name: doctrine.event_listener, event: 'onFlush' }
+            - { name: doctrine.event_listener, event: 'loadClassMetadata' }
+        calls:
+            - [ setAnnotationReader, [ '@gedmo.mapping.driver.attribute' ] ]
+            - [ setClock, [ '@clock' ] ]    
+
+when@test:
+    parameters:
+        env(MOCK_CLOCK_INITIAL_TIME): 'now'
+        env(MERCURE_PUBLIC_URL): 'http://localhost:3000/.well-known/mercure'
+        
+    services:
+        App\Tests\Simulator\:
+            resource: '../tests/Simulator/'
+
+        mercure.hub.default:
+            class: Symfony\Component\Mercure\MockHub
+            arguments:
+                $url: '%env(MERCURE_PUBLIC_URL)%'
+                $jwtProvider: '@mercure.hub.default.jwt.provider'
+                $publisher: '@App\Tests\Simulator\MercurePublisherSimulator'
+
+        Google\Client: '@App\Tests\Simulator\GoogleClientSimulator'
+
+        clock: 
+            class: 'Symfony\Component\Clock\MockClock'
+            arguments:
+                - '%env(MOCK_CLOCK_INITIAL_TIME)%'

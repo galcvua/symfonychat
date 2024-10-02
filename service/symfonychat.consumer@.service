@@ -1,0 +1,13 @@
+[Unit]
+Description="Symfonychat consumer for transport %i"
+PartOf=symfonychat.target
+StartLimitIntervalSec=20s
+StartLimitBurst=5
+
+[Service]
+ExecStart=/usr/bin/php -d memory_limit=-1 /var/www/chat.symfonystudio.com/current/bin/console messenger:consume %i --limit=50 --env=prod
+Restart=always
+RestartSec=1
+TimeoutSec=300
+User=wowa
+Group=wowa

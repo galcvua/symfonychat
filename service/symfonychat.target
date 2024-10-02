@@ -1,0 +1,6 @@
+[Unit]
+Description="Symfonychat consumers"
+Requires=symfonychat.consumer@webpush.service
+
+[Install]
+WantedBy=multi-user.target

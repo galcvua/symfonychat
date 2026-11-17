@@ -1,6 +1,10 @@
 # Chat Application with Symfony 7, API Platform 4, Mercure and Firebase WebPush
 
-Demo: [https://chat.symfonystudio.com](https://chat.symfonystudio.com)  
+## Archive Note
+
+This project is no longer maintained. The APIs have changed since it was released, so it can no longer be run without modifying the code.
+
+##
 
 Some popular messaging platforms have faced criticism for their involvement in the spread of propaganda and illegal activities. In response, governments have blocked access to these platforms, arresting representatives and even owners.  
 Your business shouldn't be affected by these disruptions.  
@@ -39,9 +43,9 @@ Connections to external services like Google and the Mercure Hub are not require
 
 ## Usage  
 
-1. Start your development server and navigate to [`/api`](https://chat.symfonystudio.com/api) to see the OpenAPI documentation.  
+1. Start your development server and navigate to `/api` to see the OpenAPI documentation.  
 2. Use a Bearer token with a valid Google authentication token for authorization and to perform test requests.  
-3. You can now integrate this API into your project to enhance communication features. See the demo at [https://chat.symfonystudio.com](https://chat.symfonystudio.com).  
+3. You can now integrate this API into your project to enhance communication features.
 
 ## License  
 
